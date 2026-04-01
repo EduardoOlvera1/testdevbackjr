@@ -4,7 +4,7 @@ Prueba: **DESARROLLADOR JR**
 
 Deadline: **1 día**
 
-Nombre: 
+Nombre: JOSE EDUARDO OLVERA VARILLAS
 
 ---
 
