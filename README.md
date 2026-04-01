@@ -145,4 +145,60 @@ Trabaja en SQL Server y realiza las siguientes consultas basadas en la tabla `cc
 
 ---
 
+## Solución implementada
+
+### Levantar el contenedor de SQL Server
+
+```bash
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourStrong!Passw0rd' \
+  -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2019-latest
+```
+
+### Ejecutar migraciones y levantar la API
+
+```bash
+cd LoginApi
+dotnet ef database update
+dotnet run
+```
+
+La API queda disponible en `http://localhost:5253`.
+
+### Endpoints disponibles
+
+
+GET `/logins` Lista todos los registros de login/logout
+POST `/logins` Registra un nuevo login o logout
+PUT `/logins/{id}` Actualiza la extensión de un registro
+DELETE `/logins/{id}` Elimina un registro
+GET `/reports/csv` Descarga el reporte en CSV
+
+### Descargar el CSV generado
+
+#### Con curl
+
+```bash
+curl -o reporte_horas.csv http://localhost:5253/reports/csv
+```
+
+#### Con Postman
+
+1. Abre Postman y crea una nueva petición.
+2. Selecciona el método **GET**.
+3. Ingresa la URL: `http://localhost:5253/reports/csv`
+4. Haz clic en **Send**.
+5. En la respuesta, haz clic en **Save Response → Save to a file** y guarda el archivo como `reporte_horas.csv`.
+
+#### Contenido del CSV
+
+El archivo generado contiene las siguientes columnas:
+
+```
+Usuario,Nombre Completo,Area,Total Horas Trabajadas
+```
+
+El total de horas trabajadas se calcula emparejando cada registro de login (`TipoMov = 1`) con su correspondiente logout (`TipoMov = 0`) y sumando las diferencias de tiempo por usuario.
+
+---
+
 Este examen evalúa tu capacidad para desarrollar APIs RESTful, realizar consultas avanzadas en SQL Server y generar reportes en formato CSV. Se valorará la organización del código, las mejores prácticas y cualquier documentación adicional que proporciones.
